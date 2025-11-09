@@ -433,7 +433,7 @@ All derivative works must cite lineage and checksum.
 ## CONTACT
 
 **Personal Edition** → activemirror.ai
-**Enterprise** → enterprise@activemirror.ai
+**Enterprise** → paul@activemirror.ai
 **Developers** → api.mirrordna.com / github.com/mirrordna
 
 ---
