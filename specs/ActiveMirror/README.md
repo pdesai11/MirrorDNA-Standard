@@ -99,7 +99,7 @@ All specifications maintain symbolic continuity through:
 ## Contact
 
 **Product Questions:** activemirror.ai
-**Enterprise Inquiries:** enterprise@activemirror.ai
+**Enterprise Inquiries:** paul@activemirror.ai
 **Technical/API:** api.mirrordna.com
 **Repository:** github.com/MirrorDNA-Reflection-Protocol/MirrorDNA-Standard
 
