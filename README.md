@@ -1,5 +1,7 @@
 # MirrorDNA Standard — Copy-Paste First
 
+Origin Story: MirrorDNA was built by someone tired of AI hallucinations and weird behavior. It started as a personal sanity-check system in a beach village and evolved into this protocol. This isn't corporate R&D—it's a tested system for having truthful, continuous conversations with AI.
+
 ⟡ Continuity • Sovereignty • Trust by Design™
 
 > Use MirrorDNA by **copy-pasting one file** into any AI. Cloning/forking is optional.
