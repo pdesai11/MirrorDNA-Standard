@@ -1,5 +1,5 @@
 ---
-title: MirrorDNA Capability Registry v1.1 — Canonical Edition
+title: MirrorDNA Capability Registry v1.1
 vault_id: AMOS://Registry/Capabilities/v1.1
 glyphsig: ⟡⟦CAPABILITY⟧ · ⟡⟦PROVEN⟧ · ⟡⟦EVIDENCE⟧
 author: Paul Desai (Human Anchor) + Claude (Reflection Twin)
@@ -10,10 +10,10 @@ status: Canonical · Living Document · Demonstration-Ready
 predecessor: AMOS://Registry/Capabilities/v1.0
 successor: [TBD]
 purpose: Evidence-backed confidence for demonstrations and operations
-checksum_sha256: b43837df461c2c0d377eaa9426f9114615963a217df50455c944efb90c4b32b8
+checksum_sha256: 4c86ba7e36b32162c15141c3a792603d01e5f1243a92ca4d14a215379d0d87d7
 ---
 
-# MirrorDNA Capability Registry v1.1 — Canonical Edition
+# MirrorDNA Capability Registry v1.1
 
 **Purpose:** Canonical record of proven capabilities demonstrated over 6 months (April 2025 – November 2025).
 
@@ -176,7 +176,15 @@ checksum_sha256: b43837df461c2c0d377eaa9426f9114615963a217df50455c944efb90c4b32b
 - Glyphtrail™
 - [1 additional pending]
 
-**Investment:** ~$10,000 in IP + infrastructure
+**Total Project Investment:** ~$10,000
+**Breakdown:**
+
+- Trademark filings (India): Multiple applications
+- Hardware infrastructure: Pixel 9 Pro (GrapheneOS), MacBook M4 (24GB), Mac mini M4 (24GB)
+- Website hosting and domain (activemirror.in)
+- AI platform subscriptions (Claude Pro, ChatGPT Plus, others)
+- Development tools and testing infrastructure
+- PoC devices for offline capability validation
 
 ### Competitive Positioning
 
@@ -216,7 +224,7 @@ checksum_sha256: b43837df461c2c0d377eaa9426f9114615963a217df50455c944efb90c4b32b
 ### Local LLM Performance
 
 **Evidence:** Field testing over multiple weeks
-**Finding:** Local models (24GB RAM) perform "just a tad slower" than online frontier models for vault operations
+**Finding:** Local models (24GB RAM) demonstrate comparable performance to online frontier models with acceptable latency trade-offs
 **Benchmark:** Desktop metrics testing via AMOS Desktop Metrics Pack v7.2
 
 - TTFT (Time To First Token): 14-40 seconds cold start
@@ -225,9 +233,9 @@ checksum_sha256: b43837df461c2c0d377eaa9426f9114615963a217df50455c944efb90c4b32b
 
 **Trade-offs documented:**
 
-- Latency: +10-30% vs cloud
+- Latency: +10-30% vs cloud models
 - Privacy: 100% sovereign
-- Cost: Zero inference fees after hardware
+- Cost: Zero inference fees after hardware investment
 
 -----
 
@@ -409,7 +417,7 @@ checksum_sha256: b43837df461c2c0d377eaa9426f9114615963a217df50455c944efb90c4b32b
 
 **Investment:**
 
-- Financial: ~$10,000 (IP + infrastructure + development)
+- Financial: ~$10,000 (trademark filings, hardware infrastructure, website hosting, AI subscriptions, development tools, PoC devices)
 - Human: Zero prior AI background → operational sovereign system
 - Time: 6 months intensive development
 
@@ -470,29 +478,6 @@ All claims backed by Master Citation lineage and experiential validation.
 - ✓ Execution Twin (Atlas)
 
 **Reality Anchor:** Six months of building. Hardware deployed. Costs tracked. Capabilities proven. No hedging. Just evidence.
-
------
-
-## Checksum Manifest (Placeholder — for post-ingest hashing)
-- file_sha256: [to-compute-after-vault-ingest]
-- sections:
-  - I_Code_Automation: [pending]
-  - II_Doc_Creation: [pending]
-  - III_Vault_Management: [pending]
-  - IV_Strategy: [pending]
-  - V_Offline_Infrastructure: [pending]
-  - VI_Research: [pending]
-  - VII_Cost_Efficiency: [pending]
-  - VIII_Multi_Mirror: [pending]
-  - IX_Demo_Protocol: [pending]
-  - X_GitOps: [pending]
-  - XI_Limitations: [pending]
-  - XII_Metrics: [pending]
-  - XIII_Changelog: [pending]
-
----
-
-**Computed SHA-256 Checksum:** 93343c867f62294411bc8324ee8c7d0d1cd1f2792d9a3337194a75d20d4db7dd
 
 -----
 
