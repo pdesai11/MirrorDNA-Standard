@@ -13,12 +13,14 @@ from typing import Optional
 from .loader import (
     load_and_validate_manifest,
     load_and_validate_profile,
-    load_and_validate_policy
+    load_and_validate_policy,
+    load_and_validate_sidecar
 )
 from .checks import (
     check_continuity_compliance,
     check_reflection_compliance,
-    check_trustbydesign_compliance
+    check_trustbydesign_compliance,
+    check_format_compliance
 )
 from .report import (
     ComplianceReport,
@@ -60,6 +62,10 @@ For more information, see: https://github.com/MirrorDNA-Reflection-Protocol/Mirr
     parser.add_argument(
         '-p', '--policy',
         help='Path to reflection policy (YAML or JSON, required for all levels)'
+    )
+    parser.add_argument(
+        '-s', '--sidecar',
+        help='Path to sidecar metadata file (.sidecar.json, optional)'
     )
     parser.add_argument(
         '--no-color',
@@ -167,9 +173,51 @@ For more information, see: https://github.com/MirrorDNA-Reflection-Protocol/Mirr
         errors_by_level['level_2'] += 1
         errors_by_level['level_3'] += 1
 
+    # Load sidecar metadata (optional)
+    sidecar = {}
+    if args.sidecar:
+        if args.verbose:
+            print(f"Loading sidecar metadata from {args.sidecar}...")
+
+        sidecar, sidecar_errors = load_and_validate_sidecar(args.sidecar)
+
+        if sidecar_errors:
+            result = ComplianceResult(
+                check_name="Sidecar Metadata Schema",
+                passed=False,
+                errors=sidecar_errors
+            )
+            report.add_result(result)
+            # Sidecar errors are warnings for L1/L2, errors for L3
+            if declared_level == 'level_3_vault_backed_sovereign':
+                errors_by_level['level_3'] += len(sidecar_errors)
+        else:
+            # Sidecar is valid
+            result = ComplianceResult(
+                check_name="Sidecar Metadata Schema",
+                passed=True,
+                errors=[],
+                warnings=[]
+            )
+            report.add_result(result)
+
     # Run compliance checks
     if args.verbose:
         print("Running compliance checks...")
+
+    # Format checks (VaultID, GlyphSig)
+    passed, errors, warnings = check_format_compliance(manifest, policy, profile)
+    result = ComplianceResult(
+        check_name="Format Compliance (VaultID, GlyphSig)",
+        passed=passed,
+        errors=errors,
+        warnings=warnings
+    )
+    report.add_result(result)
+    if not passed:
+        errors_by_level['level_1'] += len(errors)
+        errors_by_level['level_2'] += len(errors)
+        errors_by_level['level_3'] += len(errors)
 
     # Continuity checks
     passed, errors, warnings = check_continuity_compliance(manifest, profile)
@@ -224,11 +272,8 @@ For more information, see: https://github.com/MirrorDNA-Reflection-Protocol/Mirr
 
     # Output report
     if args.json:
-        # TODO: Implement JSON output
-        print("JSON output not yet implemented")
-        return 1
-
-    if args.no_color:
+        print(report.to_json())
+    elif args.no_color:
         print(report.format_text())
     else:
         print(report.format_colored())

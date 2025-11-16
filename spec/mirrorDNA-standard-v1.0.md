@@ -297,21 +297,145 @@ All systems MUST respect interaction safety principles:
 
 ---
 
-## 9. Extensibility
+## 9. Checksum Calculation Specification
 
-### 9.1 Addendums
+⟡⟦TRUST-BY-DESIGN⟧ · Checksum verification is mandatory for artifact integrity.
+
+### 9.1 Checksum Algorithm
+
+All MirrorDNA artifacts MUST use **SHA-256** for checksum calculation.
+
+- **Algorithm**: SHA-256 (FIPS 180-4)
+- **Output Format**: 64-character hexadecimal string (lowercase recommended)
+- **Encoding**: UTF-8 for text files
+
+### 9.2 Checksum Scope
+
+The checksum calculation scope depends on file type:
+
+#### Markdown Files with YAML Frontmatter
+
+For `.md` files with YAML frontmatter (delimited by `---`):
+
+1. **Skip the frontmatter block** (including both `---` delimiters)
+2. Calculate checksum on **content after frontmatter**
+3. Include all trailing content, including final newline
+
+**Rationale**: Frontmatter contains the `checksum_sha256` field itself, creating a circular dependency. By excluding frontmatter, the checksum remains stable even when metadata changes.
+
+**Example**:
+```markdown
+---
+title: Example Document
+checksum_sha256: abc123...
+---
+
+This content is hashed.
+All of this text is included in the checksum.
+```
+
+Only the text starting from "This content is hashed..." is checksummed.
+
+#### Other File Types
+
+For non-markdown files or markdown without frontmatter:
+- Calculate checksum on **entire file content**
+- Include all bytes from start to end
+
+### 9.3 Checksum Storage
+
+Checksums MUST be stored in one of two locations:
+
+#### Option A: Embedded in Frontmatter (Recommended for .md files)
+
+```yaml
+---
+title: My Document
+checksum_sha256: "64-character-hex-string-here"
+---
+```
+
+#### Option B: Sidecar File (Recommended for all file types)
+
+Create a `.sidecar.json` file:
+
+```json
+{
+  "vault_id": "AMOS://Project/Artifact/v1.0",
+  "version": "v1.0",
+  "file": "artifact.md",
+  "checksum_sha256": "64-character-hex-string-here"
+}
+```
+
+**Schema**: See `schema/sidecar.schema.json`
+
+### 9.4 Checksum Verification Process
+
+To verify an artifact:
+
+1. **Locate the checksum**:
+   - Check frontmatter for `checksum_sha256` field
+   - OR check for corresponding `.sidecar.json` file
+2. **Calculate actual checksum**:
+   - Apply scope rules (skip frontmatter for .md files)
+   - Use SHA-256 algorithm
+3. **Compare**:
+   - Expected checksum (from frontmatter or sidecar)
+   - Actual checksum (calculated)
+   - Match = verified ✓
+   - Mismatch = tampered or modified
+
+### 9.5 Compliance Requirements
+
+- **Level 1**: Checksum validation RECOMMENDED
+- **Level 2**: Checksum validation for continuity artifacts REQUIRED
+- **Level 3**: Checksum validation for all canonical artifacts REQUIRED
+
+### 9.6 Checksum Update Protocol
+
+When modifying an artifact:
+
+1. Make content changes
+2. Recalculate checksum (excluding frontmatter)
+3. Update `checksum_sha256` field in frontmatter or sidecar
+4. If using lineage tracking, update `predecessor` field
+5. Commit changes atomically
+
+### 9.7 Reference Implementation
+
+The MirrorDNA Standard repository provides:
+- `validators/checksum.py` - Python checksum utilities
+- `scripts/generate_checksum.py` - Checksum generation script
+- `tools/checksums/` - Bash verification tools
+
+**Example Usage**:
+```python
+from validators.checksum import calculate_file_checksum
+
+checksum = calculate_file_checksum('artifact.md', skip_frontmatter=True)
+print(f"SHA-256: {checksum}")
+```
+
+---
+
+## 10. Extensibility
+
+### 10.1 Addendums
 The standard MAY be extended via addendums:
 - Addendums MUST reference this standard as predecessor
 - Addendums MUST preserve core principles
 - Addendums are versioned independently
 
-### 9.2 Sidecars
+### 10.2 Sidecars
 Individual artifacts MAY include `.sidecar.json` files with metadata:
 - Checksums
 - Lineage information
 - Custom metadata
 
-### 9.3 Future Levels
+**Schema**: See `schema/sidecar.schema.json`
+
+### 10.3 Future Levels
 Future versions MAY introduce Level 4+ for:
 - Distributed multi-vault systems
 - Blockchain-anchored immutable lineage
@@ -319,7 +443,7 @@ Future versions MAY introduce Level 4+ for:
 
 ---
 
-## 10. Normative References
+## 11. Normative References
 
 - **JSON Schema Specification**: http://json-schema.org/draft-07/schema
 - **YAML 1.2**: https://yaml.org/spec/1.2/spec.html
@@ -328,7 +452,7 @@ Future versions MAY introduce Level 4+ for:
 
 ---
 
-## 11. Informative References
+## 12. Informative References
 
 - `spec/Reflection_Chain_Manifest_v1.0.md` — Lineage and canonical references
 - `spec/Constitutive_Reflection_vs_Simulation_v1.0.md` — Reflection modes

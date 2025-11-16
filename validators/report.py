@@ -165,6 +165,32 @@ class ComplianceReport:
         lines.append(BOLD + "=" * 70 + RESET)
         return "\n".join(lines)
 
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert report to dictionary for JSON serialization."""
+        return {
+            "project_name": self.project_name,
+            "declared_level": self.declared_level,
+            "detected_level": self.detected_level,
+            "overall_passed": self.overall_passed,
+            "total_errors": self.get_total_errors(),
+            "total_warnings": self.get_total_warnings(),
+            "results": [
+                {
+                    "check_name": r.check_name,
+                    "passed": r.passed,
+                    "errors": r.errors,
+                    "warnings": r.warnings
+                }
+                for r in self.results
+            ],
+            "recommendations": self.recommendations
+        }
+
+    def to_json(self) -> str:
+        """Format report as JSON."""
+        import json
+        return json.dumps(self.to_dict(), indent=2, ensure_ascii=False)
+
 
 def detect_compliance_level(
     manifest: Dict[str, Any],

@@ -1,0 +1,157 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mirrordna.org/schemas/sidecar.schema.json",
+  "title": "MirrorDNA Sidecar Metadata",
+  "description": "Metadata sidecar for MirrorDNA artifacts (.sidecar.json files)",
+  "type": "object",
+  "required": [
+    "vault_id",
+    "version",
+    "checksum_sha256"
+  ],
+  "properties": {
+    "vault_id": {
+      "type": "string",
+      "description": "Unique vault identifier (AMOS://Component/Artifact/Version)",
+      "pattern": "^AMOS://[A-Za-z0-9_-]+(?:/[A-Za-z0-9_-]+)*(/v\\d+(?:\\.\\d+)*)?$"
+    },
+    "glyphsig": {
+      "description": "Glyph signature(s) for semantic marking",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^⟡⟦[A-Z0-9_-]+⟧(?:\\s*·\\s*⟡⟦[A-Z0-9_-]+⟧)*$"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^⟡⟦[A-Z0-9_-]+⟧(?:\\s*·\\s*⟡⟦[A-Z0-9_-]+⟧)*$"
+          },
+          "minItems": 1
+        }
+      ]
+    },
+    "version": {
+      "type": "string",
+      "description": "Version of the artifact (semantic versioning recommended)",
+      "pattern": "^v?\\d+(\\.\\d+)*$"
+    },
+    "file": {
+      "type": "string",
+      "description": "Associated file name (e.g., artifact.md)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable title of the artifact"
+    },
+    "checksum_sha256": {
+      "type": "string",
+      "description": "SHA-256 checksum of the artifact content",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author name and affiliation"
+    },
+    "created": {
+      "type": "string",
+      "description": "Creation date (ISO 8601 format: YYYY-MM-DD)",
+      "format": "date"
+    },
+    "updated": {
+      "type": "string",
+      "description": "Last update date (ISO 8601 format)",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "description": "Document status (e.g., Canonical, Draft, Exploratory)",
+      "examples": [
+        "Canonical",
+        "Canonical · Standard",
+        "Draft · In Progress",
+        "Exploratory · Reflective"
+      ]
+    },
+    "lineage": {
+      "type": "object",
+      "description": "Lineage tracking for predecessor/successor relationships",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "Origin of the lineage chain",
+          "examples": ["human_anchor", "system_generated", "derived"]
+        },
+        "predecessor": {
+          "description": "Previous version in the lineage",
+          "oneOf": [
+            {"type": "string"},
+            {"type": "null"}
+          ]
+        },
+        "successor": {
+          "description": "Next version in the lineage",
+          "oneOf": [
+            {"type": "string"},
+            {"type": "null"}
+          ]
+        }
+      }
+    },
+    "document_status": {
+      "type": "object",
+      "description": "Document openness and usage conditions",
+      "properties": {
+        "default": {
+          "type": "string",
+          "enum": ["OPEN", "RESTRICTED", "PRIVATE"],
+          "description": "Default document status"
+        },
+        "conditions": {
+          "type": "object",
+          "description": "Usage conditions for different content sections",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "compliance_tier": {
+      "type": "string",
+      "description": "MirrorDNA compliance tier",
+      "enum": ["L1", "L2", "L3"],
+      "examples": ["L1", "L2", "L3"]
+    },
+    "verified_reflective": {
+      "type": "boolean",
+      "description": "Whether this artifact has been verified for reflective compliance"
+    },
+    "validator_version": {
+      "type": "string",
+      "description": "Version of validator used to verify this artifact",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "validation_notes": {
+      "type": "string",
+      "description": "Notes from validation process"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or description"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Custom metadata fields",
+      "additionalProperties": true
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tags for categorization",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -177,3 +177,31 @@ def load_and_validate_policy(policy_path: str) -> Tuple[Dict[str, Any], List[str
         errors.append(str(e))
 
     return policy, errors
+
+
+def load_and_validate_sidecar(sidecar_path: str) -> Tuple[Dict[str, Any], List[str]]:
+    """
+    Load and validate a sidecar metadata file.
+
+    Args:
+        sidecar_path: Path to sidecar file (.sidecar.json)
+
+    Returns:
+        Tuple of (sidecar_data, error_messages)
+    """
+    errors = []
+
+    try:
+        sidecar = load_yaml_or_json(sidecar_path)
+    except (FileNotFoundError, ValueError) as e:
+        return {}, [str(e)]
+
+    try:
+        schema = load_schema('sidecar.schema.json')
+        is_valid, schema_errors = validate_against_schema(sidecar, schema)
+        if not is_valid:
+            errors.extend(schema_errors)
+    except FileNotFoundError as e:
+        errors.append(str(e))
+
+    return sidecar, errors
