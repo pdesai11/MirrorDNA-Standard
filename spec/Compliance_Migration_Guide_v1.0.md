@@ -9,7 +9,7 @@ status: Canonical · Guide
 predecessor: none
 successor: TBD
 tags: [MirrorDNA, Compliance, Migration, L1, L2, L3]
-checksum_sha256: pending
+checksum_sha256: fdeccbbb1b282eb6645c00f1a04202768c62bb7e180d77196f8ab2fedf3e2604
 ---
 
 # MirrorDNA Compliance Migration Guide v1.0

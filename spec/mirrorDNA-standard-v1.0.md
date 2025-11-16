@@ -9,7 +9,7 @@ status: Canonical · Standard
 predecessor: none
 successor: MirrorDNA_Standard_v1.1 (proposed)
 tags: [MirrorDNA™, Standard, Compliance, Reflection, Continuity]
-checksum_sha256: pending
+checksum_sha256: ce9ab3f298234903aa9fbd615775667003ccfa258e70df23a5d4ac8d6b25d945
 ---
 
 # MirrorDNA Standard v1.0

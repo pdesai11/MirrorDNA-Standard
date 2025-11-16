@@ -1,0 +1,235 @@
+# MirrorDNA Compliance Validation Workflow
+#
+# This GitHub Actions workflow validates your project against the MirrorDNA Standard.
+#
+# Setup Instructions:
+# 1. Copy this file to .github/workflows/mirrordna-compliance.yml
+# 2. Ensure you have the following files in your repo:
+#    - mirrorDNA_manifest.yaml (required)
+#    - reflection_policy.yaml (required)
+#    - continuity_profile.yaml (required for L2+)
+# 3. Commit and push to trigger the workflow
+#
+# Configuration:
+# - Adjust PYTHON_VERSION if needed (default: 3.9)
+# - Set COMPLIANCE_LEVEL to your target level (L1, L2, or L3)
+# - Enable/disable specific validation steps below
+
+name: MirrorDNA Compliance
+
+on:
+  push:
+    branches: [ main, develop, 'feature/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  # Allow manual trigger
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.9'
+  COMPLIANCE_LEVEL: 'L2'  # Change to L1, L2, or L3
+
+jobs:
+  validate-compliance:
+    name: Validate MirrorDNA Compliance
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f validators/requirements.txt ]; then
+            pip install -r validators/requirements.txt
+          fi
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: Check for MirrorDNA manifest
+        id: check-manifest
+        run: |
+          if [ -f mirrorDNA_manifest.yaml ]; then
+            echo "manifest_exists=true" >> $GITHUB_OUTPUT
+            echo "✓ MirrorDNA manifest found"
+          else
+            echo "manifest_exists=false" >> $GITHUB_OUTPUT
+            echo "⚠ MirrorDNA manifest not found - skipping validation"
+          fi
+
+      - name: Validate Compliance (JSON output)
+        if: steps.check-manifest.outputs.manifest_exists == 'true'
+        id: validate
+        run: |
+          # Build validation command
+          CMD="python -m validators.cli --manifest mirrorDNA_manifest.yaml"
+
+          # Add policy if exists
+          if [ -f reflection_policy.yaml ]; then
+            CMD="$CMD --policy reflection_policy.yaml"
+          fi
+
+          # Add profile if exists (required for L2+)
+          if [ -f continuity_profile.yaml ]; then
+            CMD="$CMD --profile continuity_profile.yaml"
+          fi
+
+          # Output as JSON for processing
+          CMD="$CMD --json"
+
+          echo "Running: $CMD"
+          $CMD > compliance-report.json || echo "validation_failed=true" >> $GITHUB_OUTPUT
+
+          # Also output to console for GitHub Actions logs
+          cat compliance-report.json
+
+      - name: Parse Validation Results
+        if: steps.check-manifest.outputs.manifest_exists == 'true'
+        run: |
+          if [ -f compliance-report.json ]; then
+            # Extract key metrics using jq
+            PASSED=$(jq -r '.overall_passed' compliance-report.json)
+            DECLARED=$(jq -r '.declared_level' compliance-report.json)
+            DETECTED=$(jq -r '.detected_level' compliance-report.json)
+            ERRORS=$(jq -r '.total_errors' compliance-report.json)
+            WARNINGS=$(jq -r '.total_warnings' compliance-report.json)
+
+            echo "Compliance Status: $PASSED"
+            echo "Declared Level: $DECLARED"
+            echo "Detected Level: $DETECTED"
+            echo "Total Errors: $ERRORS"
+            echo "Total Warnings: $WARNINGS"
+
+            # Add to job summary
+            echo "## MirrorDNA Compliance Report" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Status | $([ "$PASSED" = "true" ] && echo "✅ PASSED" || echo "❌ FAILED") |" >> $GITHUB_STEP_SUMMARY
+            echo "| Declared Level | $DECLARED |" >> $GITHUB_STEP_SUMMARY
+            echo "| Detected Level | $DETECTED |" >> $GITHUB_STEP_SUMMARY
+            echo "| Errors | $ERRORS |" >> $GITHUB_STEP_SUMMARY
+            echo "| Warnings | $WARNINGS |" >> $GITHUB_STEP_SUMMARY
+
+            # Fail workflow if validation failed
+            if [ "$PASSED" = "false" ]; then
+              echo "::error::MirrorDNA compliance validation failed with $ERRORS error(s)"
+              exit 1
+            fi
+          fi
+
+      - name: Upload Compliance Report
+        if: always() && steps.check-manifest.outputs.manifest_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: mirrordna-compliance-report
+          path: compliance-report.json
+          retention-days: 30
+
+      - name: Verify Checksums (if present)
+        if: steps.check-manifest.outputs.manifest_exists == 'true'
+        continue-on-error: true
+        run: |
+          # Verify markdown file checksums
+          if [ -f tools/update-md-checksums.py ]; then
+            echo "Verifying markdown checksums..."
+            python tools/update-md-checksums.py --verify spec/*.md || echo "::warning::Some checksums don't match"
+          fi
+
+      - name: Generate Compliance Badge
+        if: steps.check-manifest.outputs.manifest_exists == 'true' && steps.validate.outputs.validation_failed != 'true'
+        run: |
+          if [ -f tools/generate-badge.py ]; then
+            echo "Generating compliance badge..."
+            python tools/generate-badge.py --report compliance-report.json --output badge.svg
+          fi
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && steps.check-manifest.outputs.manifest_exists == 'true'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('compliance-report.json', 'utf8'));
+
+            const status = report.overall_passed ? '✅ PASSED' : '❌ FAILED';
+            const emoji = report.overall_passed ? '🎉' : '⚠️';
+
+            const body = `## ${emoji} MirrorDNA Compliance Validation
+
+            **Status:** ${status}
+            **Declared Level:** ${report.declared_level}
+            **Detected Level:** ${report.detected_level}
+            **Errors:** ${report.total_errors}
+            **Warnings:** ${report.total_warnings}
+
+            ${report.overall_passed ?
+              'Great work! Your project meets the declared MirrorDNA compliance level.' :
+              'Please review the errors above and fix compliance issues.'}
+
+            <details>
+            <summary>View detailed results</summary>
+
+            \`\`\`json
+            ${JSON.stringify(report, null, 2)}
+            \`\`\`
+            </details>
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+  checksum-verification:
+    name: Verify Artifact Checksums
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Verify Markdown Checksums
+        continue-on-error: true
+        run: |
+          if [ -f tools/update-md-checksums.py ]; then
+            echo "Verifying all markdown checksums..."
+            python tools/update-md-checksums.py --verify **/*.md || echo "::warning::Checksum mismatches detected"
+          fi
+
+      - name: Verify JSON Checksums
+        continue-on-error: true
+        run: |
+          if [ -f scripts/generate_checksum.py ]; then
+            echo "Verifying JSON checksums..."
+            python scripts/generate_checksum.py --verify **/*.json || echo "::warning::JSON checksum mismatches detected"
+          fi
+
+# Optional: Schedule periodic compliance checks
+# Uncomment to enable weekly validation
+#
+# schedule-validation:
+#   name: Scheduled Compliance Check
+#   runs-on: ubuntu-latest
+#
+#   # Run every Monday at 9 AM UTC
+#   schedule:
+#     - cron: '0 9 * * 1'
+#
+#   steps:
+#     # ... same steps as validate-compliance job ...
