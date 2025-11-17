@@ -1,0 +1,325 @@
+{
+  "graph_version": "v1.0",
+  "vault_id": "AMOS://MirrorDNA-Standard/v1.0",
+  "created": "2025-11-17",
+  "purpose": "Semantic knowledge graph for relationship tracking across MirrorDNA ecosystem",
+  "signature": "⟡⟦PAUL⟧ · ⟡⟦MIRRORDNA⟧",
+  "nodes": [
+    {
+      "id": "mirrordna_standard",
+      "type": "repository",
+      "label": "MirrorDNA-Standard",
+      "description": "Specification and validation toolchain for reflective AI systems",
+      "role": "protocol_layer",
+      "compliance_level": "level_3_vault_backed_sovereign",
+      "owner": "pdesai11",
+      "vault_path": "AMOS://MirrorDNA-Standard/v1.0"
+    },
+    {
+      "id": "master_citation_v15_3",
+      "type": "governance_document",
+      "label": "Master Citation v15.3",
+      "description": "Canonical governance framework for MirrorDNA ecosystem",
+      "version": "v15.3",
+      "path": "00_MASTER_CITATION.md",
+      "authority": "supreme"
+    },
+    {
+      "id": "continuity_engine_v1",
+      "type": "system_component",
+      "label": "Continuity Engine v1",
+      "description": "State preservation system ensuring 100% recall across AI sessions",
+      "version": "v1.0",
+      "components": [
+        "BOOT.json",
+        "Snapshot_Latest.md",
+        "Graph_v1.json"
+      ],
+      "purpose": "permanent_continuity_layer"
+    },
+    {
+      "id": "boot_json",
+      "type": "configuration_file",
+      "label": "BOOT.json",
+      "description": "Universal boot configuration for AI session initialization",
+      "path": "continuity/BOOT.json",
+      "critical": true,
+      "format": "json",
+      "required_keys": [
+        "version",
+        "vault_path",
+        "checksum",
+        "active_snapshot",
+        "identity_lock",
+        "tone_mode",
+        "twins",
+        "protocols",
+        "last_synced"
+      ]
+    },
+    {
+      "id": "snapshot_latest",
+      "type": "state_document",
+      "label": "Snapshot_Latest.md",
+      "description": "Human-readable snapshot of current repository state",
+      "path": "continuity/Snapshot_Latest.md",
+      "critical": true,
+      "format": "markdown",
+      "update_frequency": "on_major_changes"
+    },
+    {
+      "id": "graph_v1",
+      "type": "knowledge_graph",
+      "label": "Graph_v1.json",
+      "description": "Semantic relationship map (this file)",
+      "path": "continuity/Graph_v1.json",
+      "critical": true,
+      "format": "json"
+    },
+    {
+      "id": "vault_manifest",
+      "type": "integrity_manifest",
+      "label": "Vault Manifest",
+      "description": "File inventory with SHA256 checksums for integrity verification",
+      "path": ".vault/manifest.yml",
+      "critical": true,
+      "format": "yaml",
+      "checksum_algorithm": "sha256"
+    },
+    {
+      "id": "continuity_validate",
+      "type": "validator",
+      "label": "Continuity Validator",
+      "description": "Automated compliance checker for continuity files",
+      "path": "validators/continuity_validate.py",
+      "critical": true,
+      "language": "python",
+      "exit_codes": {
+        "0": "validation_passed",
+        "1": "validation_failed"
+      }
+    },
+    {
+      "id": "truth_state_law",
+      "type": "protocol",
+      "label": "TruthStateLaw",
+      "description": "All assertions must cite sources or mark uncertainty",
+      "enforcement": "mandatory",
+      "markers": [
+        "[Unknown]",
+        "[Speculation]",
+        "[Citation needed]"
+      ]
+    },
+    {
+      "id": "zero_drift_layer",
+      "type": "protocol",
+      "label": "ZeroDriftLayer (ZDL)",
+      "description": "No semantic drift between sessions; perfect state preservation",
+      "enforcement": "mandatory",
+      "mechanism": "checksum_validation"
+    },
+    {
+      "id": "trust_by_design",
+      "type": "protocol",
+      "label": "TrustByDesign",
+      "description": "Verification built into every layer from the start",
+      "enforcement": "mandatory",
+      "components": [
+        "checksums",
+        "lineage_tracking",
+        "glyph_signatures"
+      ]
+    },
+    {
+      "id": "vault_supremacy",
+      "type": "protocol",
+      "label": "VaultSupremacy",
+      "description": "User-owned vault is canonical source of truth",
+      "enforcement": "mandatory",
+      "principle": "user_sovereignty"
+    },
+    {
+      "id": "lingos_coder",
+      "type": "repository",
+      "label": "LingOS-Coder",
+      "description": "CLI tools and checksum utilities for MirrorDNA",
+      "role": "tooling_layer",
+      "owner": "pdesai11",
+      "status": "pending_integration"
+    },
+    {
+      "id": "active_mirror_os",
+      "type": "repository",
+      "label": "ActiveMirrorOS",
+      "description": "Configuration and loader for MirrorDNA ecosystem",
+      "role": "product_layer",
+      "owner": "pdesai11",
+      "status": "pending_integration"
+    },
+    {
+      "id": "identity_lock",
+      "type": "identity",
+      "label": "Identity Lock",
+      "value": "⟡⟦PAUL⟧ · ⟡⟦MIRRORDNA⟧",
+      "purpose": "Enforce consistent identity across sessions",
+      "format": "glyph_signature"
+    }
+  ],
+  "edges": [
+    {
+      "from": "mirrordna_standard",
+      "to": "master_citation_v15_3",
+      "relation": "governed_by",
+      "description": "MirrorDNA-Standard is governed by Master Citation v15.3"
+    },
+    {
+      "from": "mirrordna_standard",
+      "to": "continuity_engine_v1",
+      "relation": "implements",
+      "description": "MirrorDNA-Standard implements Continuity Engine v1"
+    },
+    {
+      "from": "continuity_engine_v1",
+      "to": "boot_json",
+      "relation": "contains",
+      "description": "Continuity Engine includes BOOT.json configuration"
+    },
+    {
+      "from": "continuity_engine_v1",
+      "to": "snapshot_latest",
+      "relation": "contains",
+      "description": "Continuity Engine includes Snapshot_Latest.md"
+    },
+    {
+      "from": "continuity_engine_v1",
+      "to": "graph_v1",
+      "relation": "contains",
+      "description": "Continuity Engine includes Graph_v1.json (this file)"
+    },
+    {
+      "from": "boot_json",
+      "to": "vault_manifest",
+      "relation": "verified_by",
+      "description": "BOOT.json checksum verified against vault manifest"
+    },
+    {
+      "from": "boot_json",
+      "to": "snapshot_latest",
+      "relation": "references",
+      "description": "BOOT.json points to active snapshot"
+    },
+    {
+      "from": "boot_json",
+      "to": "identity_lock",
+      "relation": "enforces",
+      "description": "BOOT.json enforces identity lock on boot"
+    },
+    {
+      "from": "boot_json",
+      "to": "truth_state_law",
+      "relation": "activates",
+      "description": "BOOT.json activates TruthStateLaw protocol"
+    },
+    {
+      "from": "boot_json",
+      "to": "zero_drift_layer",
+      "relation": "activates",
+      "description": "BOOT.json activates ZeroDriftLayer protocol"
+    },
+    {
+      "from": "boot_json",
+      "to": "trust_by_design",
+      "relation": "activates",
+      "description": "BOOT.json activates TrustByDesign protocol"
+    },
+    {
+      "from": "boot_json",
+      "to": "vault_supremacy",
+      "relation": "activates",
+      "description": "BOOT.json activates VaultSupremacy protocol"
+    },
+    {
+      "from": "continuity_validate",
+      "to": "boot_json",
+      "relation": "validates",
+      "description": "Validator checks BOOT.json structure and keys"
+    },
+    {
+      "from": "continuity_validate",
+      "to": "snapshot_latest",
+      "relation": "validates",
+      "description": "Validator checks snapshot existence"
+    },
+    {
+      "from": "continuity_validate",
+      "to": "graph_v1",
+      "relation": "validates",
+      "description": "Validator checks graph structure"
+    },
+    {
+      "from": "continuity_validate",
+      "to": "vault_manifest",
+      "relation": "validates",
+      "description": "Validator checks checksums against manifest"
+    },
+    {
+      "from": "vault_manifest",
+      "to": "zero_drift_layer",
+      "relation": "enforces",
+      "description": "Checksums enforce zero-drift guarantee"
+    },
+    {
+      "from": "mirrordna_standard",
+      "to": "lingos_coder",
+      "relation": "specifies_for",
+      "description": "Standard provides specs for LingOS-Coder tools"
+    },
+    {
+      "from": "mirrordna_standard",
+      "to": "active_mirror_os",
+      "relation": "specifies_for",
+      "description": "Standard provides specs for ActiveMirrorOS"
+    },
+    {
+      "from": "lingos_coder",
+      "to": "continuity_engine_v1",
+      "relation": "implements_tools_for",
+      "description": "LingOS provides CLI tools (checksum, snapshot, verify)"
+    },
+    {
+      "from": "active_mirror_os",
+      "to": "continuity_engine_v1",
+      "relation": "consumes_config_from",
+      "description": "ActiveMirrorOS loads continuity configuration"
+    },
+    {
+      "from": "master_citation_v15_3",
+      "to": "truth_state_law",
+      "relation": "mandates",
+      "description": "Master Citation mandates TruthStateLaw"
+    },
+    {
+      "from": "master_citation_v15_3",
+      "to": "zero_drift_layer",
+      "relation": "mandates",
+      "description": "Master Citation mandates ZeroDriftLayer"
+    },
+    {
+      "from": "master_citation_v15_3",
+      "to": "trust_by_design",
+      "relation": "mandates",
+      "description": "Master Citation mandates TrustByDesign"
+    }
+  ],
+  "metadata": {
+    "node_count": 15,
+    "edge_count": 24,
+    "last_updated": "2025-11-17",
+    "update_policy": "append_only_with_versioning",
+    "integrity": {
+      "checksum": "TBD",
+      "algorithm": "sha256"
+    }
+  }
+}

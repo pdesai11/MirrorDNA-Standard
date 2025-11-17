@@ -1,0 +1,144 @@
+{
+  "graph_version": "v1.0",
+  "vault_id": "AMOS://YourRepository/v1.0",
+  "created": "2025-11-17",
+  "purpose": "Example semantic knowledge graph for Continuity Engine v1",
+  "signature": "⟡⟦YOUR_NAME⟧ · ⟡⟦YOUR_PROJECT⟧",
+  "nodes": [
+    {
+      "id": "your_repository",
+      "type": "repository",
+      "label": "Your Repository",
+      "description": "Main repository description",
+      "role": "your_role",
+      "compliance_level": "level_3_vault_backed_sovereign",
+      "owner": "username",
+      "vault_path": "AMOS://YourRepository/v1.0"
+    },
+    {
+      "id": "master_citation",
+      "type": "governance_document",
+      "label": "Master Citation v15.3",
+      "description": "Canonical governance framework",
+      "version": "v15.3",
+      "authority": "supreme"
+    },
+    {
+      "id": "continuity_engine",
+      "type": "system_component",
+      "label": "Continuity Engine v1",
+      "description": "State preservation system",
+      "version": "v1.0",
+      "components": [
+        "BOOT.json",
+        "Snapshot_Latest.md",
+        "Graph_v1.json"
+      ]
+    },
+    {
+      "id": "boot_json",
+      "type": "configuration_file",
+      "label": "BOOT.json",
+      "description": "Universal boot configuration",
+      "path": "continuity/BOOT.json",
+      "critical": true,
+      "format": "json"
+    },
+    {
+      "id": "snapshot",
+      "type": "state_document",
+      "label": "Snapshot_Latest.md",
+      "description": "Current state snapshot",
+      "path": "continuity/Snapshot_Latest.md",
+      "critical": true,
+      "format": "markdown"
+    },
+    {
+      "id": "graph",
+      "type": "knowledge_graph",
+      "label": "Graph_v1.json",
+      "description": "Semantic relationship map (this file)",
+      "path": "continuity/Graph_v1.json",
+      "critical": true,
+      "format": "json"
+    },
+    {
+      "id": "truth_state_law",
+      "type": "protocol",
+      "label": "TruthStateLaw",
+      "description": "Cite-or-Silence protocol",
+      "enforcement": "mandatory"
+    },
+    {
+      "id": "zero_drift_layer",
+      "type": "protocol",
+      "label": "ZeroDriftLayer",
+      "description": "Zero semantic drift guarantee",
+      "enforcement": "mandatory",
+      "mechanism": "checksum_validation"
+    }
+  ],
+  "edges": [
+    {
+      "from": "your_repository",
+      "to": "master_citation",
+      "relation": "governed_by",
+      "description": "Repository is governed by Master Citation"
+    },
+    {
+      "from": "your_repository",
+      "to": "continuity_engine",
+      "relation": "implements",
+      "description": "Repository implements Continuity Engine"
+    },
+    {
+      "from": "continuity_engine",
+      "to": "boot_json",
+      "relation": "contains",
+      "description": "Continuity Engine includes BOOT.json"
+    },
+    {
+      "from": "continuity_engine",
+      "to": "snapshot",
+      "relation": "contains",
+      "description": "Continuity Engine includes Snapshot"
+    },
+    {
+      "from": "continuity_engine",
+      "to": "graph",
+      "relation": "contains",
+      "description": "Continuity Engine includes Graph (this file)"
+    },
+    {
+      "from": "boot_json",
+      "to": "truth_state_law",
+      "relation": "activates",
+      "description": "BOOT.json activates TruthStateLaw"
+    },
+    {
+      "from": "boot_json",
+      "to": "zero_drift_layer",
+      "relation": "activates",
+      "description": "BOOT.json activates ZeroDriftLayer"
+    }
+  ],
+  "metadata": {
+    "node_count": 8,
+    "edge_count": 7,
+    "last_updated": "2025-11-17",
+    "update_policy": "append_only_with_versioning",
+    "integrity": {
+      "checksum": "TBD",
+      "algorithm": "sha256"
+    }
+  },
+  "_comments": {
+    "purpose": "This is an EXAMPLE knowledge graph. Copy and customize for your repository.",
+    "nodes": "Add nodes for your components, dependencies, protocols, etc.",
+    "edges": "Connect nodes with meaningful relationships",
+    "node_types": "repository, governance_document, system_component, configuration_file, state_document, knowledge_graph, protocol, identity, validator, etc.",
+    "relation_types": "governed_by, implements, contains, verified_by, references, enforces, activates, validates, specifies_for, mandates, etc.",
+    "validation": "All 'from' and 'to' must reference existing node IDs",
+    "update_policy": "Append new nodes and edges; version file on breaking changes"
+  }
+}

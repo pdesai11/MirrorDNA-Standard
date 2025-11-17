@@ -1,0 +1,89 @@
+name: Continuity Engine Validation
+
+on:
+  push:
+    branches: [ main, develop, 'claude/**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  continuity-validation:
+    name: Validate Continuity Engine
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pyyaml
+
+      - name: Check file existence
+        run: |
+          echo "Checking for required continuity files..."
+          test -f continuity/BOOT.json || { echo "Missing continuity/BOOT.json"; exit 1; }
+          test -f continuity/Snapshot_Latest.md || { echo "Missing continuity/Snapshot_Latest.md"; exit 1; }
+          test -f continuity/Graph_v1.json || { echo "Missing continuity/Graph_v1.json"; exit 1; }
+          test -f .vault/manifest.yml || { echo "Missing .vault/manifest.yml"; exit 1; }
+          echo "✅ All required files exist"
+
+      - name: Validate JSON syntax
+        run: |
+          echo "Validating JSON files..."
+          python -m json.tool continuity/BOOT.json > /dev/null
+          python -m json.tool continuity/Graph_v1.json > /dev/null
+          echo "✅ JSON validation passed"
+
+      - name: Validate YAML syntax
+        run: |
+          echo "Validating YAML files..."
+          python -c "import yaml; yaml.safe_load(open('.vault/manifest.yml'))"
+          echo "✅ YAML validation passed"
+
+      - name: Run continuity validator
+        run: |
+          echo "Running continuity validator..."
+          python validators/continuity_validate.py
+
+      - name: Check for TBD checksums (warning only)
+        continue-on-error: true
+        run: |
+          echo "Checking for TBD checksums..."
+          if grep -q '"checksum": "TBD"' continuity/BOOT.json; then
+            echo "⚠️  Warning: BOOT.json has TBD checksum"
+          fi
+          if grep -q 'checksum: "TBD"' .vault/manifest.yml; then
+            echo "⚠️  Warning: manifest.yml has TBD checksums"
+          fi
+
+      - name: Validate BOOT.json required keys
+        run: |
+          echo "Validating BOOT.json structure..."
+          python -c "
+          import json
+          with open('continuity/BOOT.json') as f:
+              boot = json.load(f)
+          required = ['version', 'vault_path', 'checksum', 'active_snapshot',
+                      'identity_lock', 'tone_mode', 'twins', 'protocols', 'last_synced']
+          missing = [k for k in required if k not in boot]
+          if missing:
+              print(f'Missing required keys: {missing}')
+              exit(1)
+          print('✅ All required keys present')
+          "
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "=================================================="
+          echo "Continuity Engine Validation Complete ✓"
+          echo "=================================================="
+          echo ""
+          echo "All continuity checks passed!"
