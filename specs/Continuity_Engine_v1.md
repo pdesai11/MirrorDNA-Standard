@@ -697,15 +697,28 @@ A: Each user has their own vault_path and identity_lock. Merge snapshots manuall
 
 **Stability Guarantee**: All v1.x releases maintain backward compatibility with v1.0.
 
-**Future Enhancements (v1.1+)**:
-- Automated snapshot generation
-- Graph query language
-- Distributed vault synchronization
-- Multi-agent coordination protocols
+### Roadmap Overview
 
-**Breaking Changes (v2.0+)**:
-- Additional required fields in BOOT.json
-- Schema migrations with automated tools
+The Continuity Engine evolves through two phases:
+
+**Phase 1: Hardening (v1.1 - v1.5)**
+- v1.1: Integrity-Hardened (lockfiles, verify/repair)
+- v1.2: Multi-AI Boot Profiles (profile switching)
+- v1.3: Auto-Snapshot & Rotation (snapshot automation)
+- v1.4: Drift Monitor (semantic drift detection)
+- v1.5: Bridge-Ready (local/cloud sync foundation)
+
+**Phase 2: Advanced Features (v2.0 - v2.5)**
+- v2.0: Semantic Retrieval Engine (embeddings + search)
+- v2.1: Twin-Binding Layer (cross-AI continuity)
+- v2.2: MirrorDNA Symbolic Integration (glyph anchoring)
+- v2.3: WhisperResume Integration (identity sync)
+- v2.4: Continuity UI Layer (visual dashboard)
+- v2.5: BridgePack (local ↔ cloud unification)
+
+**Full Details**: See [`Continuity_Roadmap.md`](Continuity_Roadmap.md) and [`Continuity_Engine_v2_Master_Spec.md`](Continuity_Engine_v2_Master_Spec.md)
+
+**Breaking Changes**: Only allowed in v3.0+ (future major version)
 
 ---
 
