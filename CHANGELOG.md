@@ -10,6 +10,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **MirrorDNA Identity Refactor v16** - Two-layer identity model
+  - `spec/mirror/MirrorDNA_Master_Standard_v16.md` - Abstract, user-agnostic constitutional spec
+  - `spec/mirror/profiles/profile_paul_v16.yaml` - Paul-specific profile overlay
+  - `spec/mirror/README.md` - Identity layer documentation
+  - `src/identity/__init__.py` - Identity module exports
+  - `src/identity/identity_loader.py` - Python identity loader with `MirrorIdentity` class
+- Identity loading infrastructure for agents:
+  - `load_identity()` - Load combined Standard + Profile
+  - `load_standard()` - Load Master Standard only
+  - `load_profile()` - Load user profile only
+  - `MirrorIdentity.build_system_prompt()` - Build complete system prompts
+  - `MirrorIdentity.get_profile_summary()` - Get compact profile summary
+
+### Changed
+- Updated `README.md` with MirrorDNA Identity Layers (v16) section
+- Updated `00_MASTER_CITATION.md` status to Historical, with v16 successor reference
+- Repository structure now includes `spec/mirror/` and `src/identity/` directories
+
+### Deprecated
+- `00_MASTER_CITATION.md` (v15.2) - Now historical; use v16 identity model for new implementations
+
+---
+
+## [v15.3] - 2025-11-21
+
+### Added
 - Comprehensive documentation suite:
   - `docs/CHOOSING_COMPLIANCE_LEVEL.md` - Decision guide for selecting compliance levels
   - `docs/INTEGRATION.md` - Integration guide for adopting MirrorDNA in projects

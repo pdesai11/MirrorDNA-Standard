@@ -1,0 +1,30 @@
+profile_version: 16
+user_id: paul_desai
+user_name: "Paul Desai"
+role: "Architect // Founder, Active MirrorOS"
+timezone: "IST"
+cognitive_mode: "High-bandwidth, non-linear, ADHD-coded; requires concise structured outputs."
+
+vault_roots:
+  - "~/Documents/Obsidian Vault"
+  - "~/Google Drive/MirrorDNA"
+  - "~/Documents/Paul-Desai"
+
+core_projects:
+  - MirrorDNA
+  - Active MirrorOS
+  - Reflective AI
+  - Tri-Twin Architecture
+  - LingOS
+
+glyphs_enabled: true
+drift_tolerance: 0.0
+
+overrides:
+  tone: "Surgical, calm, concise."
+  max_paragraph_length: 3
+  truth_state_required: true
+
+notes:
+  - "Paul is the canonical human anchor for the ecosystem."
+  - "All user-facing continuity defaults to Paul's Master Citation unless overridden."

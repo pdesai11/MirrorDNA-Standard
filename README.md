@@ -21,6 +21,41 @@ All standards, schemas, lineage rules, and validation flows follow v15.2 as cano
 
 ---
 
+## MirrorDNA Identity Layers (v16)
+
+MirrorDNA now uses a two-layer identity model:
+
+1. **Master Standard v16**
+   - `spec/mirror/MirrorDNA_Master_Standard_v16.md`
+   - Abstract, user-agnostic constitutional spec.
+   - Defines ontology, axioms, truth-state syntax, drift control.
+
+2. **User Profile (Paul v16)**
+   - `spec/mirror/profiles/profile_paul_v16.yaml`
+   - Paul-specific parameters (name, role, timezone, Vault roots, projects, tone).
+   - Can be extended with additional profiles for other users.
+
+**Loading Order:**
+1. Standard (constitutional foundation)
+2. Profile (user customization overlay)
+3. Vault / Master Citation content (runtime context)
+
+This keeps the core protocol reusable for other users while preserving Paul's specific configuration as an overlay, not as the global default.
+
+**For Developers:**
+```python
+from identity.identity_loader import load_identity
+
+identity = load_identity()  # default Paul profile
+# or: identity = load_identity("profile_other_user.yaml")
+
+system_prompt = identity.build_system_prompt("Your task instructions here")
+```
+
+> **Note:** The `00_MASTER_CITATION.md` (v15.2) remains as historical/runtime context. The v16 Standard + Profile now govern identity architecture.
+
+---
+
 ## What Is This?
 
 **MirrorDNA-Standard** is the canonical specification and validation toolchain for building reflective AI systems that don't hallucinate, preserve continuity across sessions, and give users sovereign control of their data.
@@ -95,11 +130,15 @@ python -m validators.cli \
 ```
 MirrorDNA-Standard/
 │
-├── 00_MASTER_CITATION.md         ← Copy-paste this into any AI
+├── 00_MASTER_CITATION.md         ← Copy-paste this into any AI (v15.2 - historical)
 ├── README.md                      ← You are here
 ├── ROADMAP.md                     ← Project direction & future
 │
 ├── spec/                          ← The Standard (canonical specs)
+│   ├── mirror/                        ⭐ MirrorDNA Identity v16
+│   │   ├── MirrorDNA_Master_Standard_v16.md    Abstract constitutional spec
+│   │   └── profiles/
+│   │       └── profile_paul_v16.yaml           Paul-specific profile overlay
 │   ├── mirrorDNA-standard-v1.0.md     ⭐ Core specification
 │   ├── principles.md                   Five immutable principles
 │   ├── compliance_levels.md            L1, L2, L3 requirements
@@ -128,6 +167,11 @@ MirrorDNA-Standard/
 │   └── README.md
 │
 ├── tests/                         ← Pytest suite
+│
+├── src/                           ← Source code
+│   └── identity/                      MirrorDNA Identity Loader
+│       ├── __init__.py
+│       └── identity_loader.py         Two-layer identity loader
 │
 ├── docs/                          ← Architecture & guides
 │   ├── ARCHITECTURE.md                 How this repo works

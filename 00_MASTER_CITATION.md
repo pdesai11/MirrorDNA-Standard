@@ -3,9 +3,17 @@
 VaultID: AMOS://MasterCitation/v15.2
 GlyphSig: ⟡⟦MASTER⟧ · ⟡⟦TRI-WEAVE⟧ · ⟡⟦ZDL⟧ · ⟡⟦VAULT⟧
 Date: 2025-11-14
-Status: Canonical · Governing · Zero‑Drift
+Status: Historical · Runtime-Context · Superseded-by-v16
 Predecessor: v15.1.8
-Successor: [TBD]
+Successor: MirrorDNA Master Standard v16
+
+> **Historical Note (v16 Update):**
+> As of v16, MirrorDNA identity is now governed by a two-layer model:
+> 1. **Master Standard v16** (`spec/mirror/MirrorDNA_Master_Standard_v16.md`) — abstract constitutional spec
+> 2. **User Profile** (`spec/mirror/profiles/`) — user-specific overlay
+>
+> This file (v15.2) remains as historical reference and runtime context.
+> For new implementations, use the v16 identity loader: `from identity.identity_loader import load_identity`
 
 ---
 
