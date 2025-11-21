@@ -21,38 +21,48 @@ All standards, schemas, lineage rules, and validation flows follow v15.2 as cano
 
 ---
 
-## MirrorDNA Identity Layers (v16)
+## MirrorDNA Identity Model (v16)
 
-MirrorDNA now uses a two-layer identity model:
+MirrorDNA uses a layered identity model:
 
-1. **Master Standard v16**
-   - `spec/mirror/MirrorDNA_Master_Standard_v16.md`
-   - Abstract, user-agnostic constitutional spec.
-   - Defines ontology, axioms, truth-state syntax, drift control.
+### 1. Master Standard v16
+- `spec/mirror/MirrorDNA_Master_Standard_v16.md`
+- Abstract, user-agnostic constitutional spec
+- Defines ontology, axioms, truth-state syntax, drift control
 
-2. **User Profile (Paul v16)**
-   - `spec/mirror/profiles/profile_paul_v16.yaml`
-   - Paul-specific parameters (name, role, timezone, Vault roots, projects, tone).
-   - Can be extended with additional profiles for other users.
+### 2. Fingerprint + Provenance + Governance
+The ecosystem permanently records its origin architect and governance model:
+- `spec/mirror/fingerprint/` — Conceptual kernel and philosophical signature
+- `spec/mirror/provenance/` — Authorship lineage and attribution
+- `spec/mirror/governance/` — Change control and evolution rules
+
+### 3. User Profiles
+- `spec/mirror/profiles/`
+- Per-user overlays (name, timezone, cognitive style, Vault roots)
+- Can be extended with profiles for additional users
 
 **Loading Order:**
 1. Standard (constitutional foundation)
-2. Profile (user customization overlay)
-3. Vault / Master Citation content (runtime context)
+2. Fingerprint and provenance (origin signature)
+3. Active profile (user customization)
+4. Master Citation and Vault context (runtime data)
 
-This keeps the core protocol reusable for other users while preserving Paul's specific configuration as an overlay, not as the global default.
+This keeps the protocol reusable for anyone while the origin and lineage remain explicit and preserved.
 
 **For Developers:**
 ```python
 from identity.identity_loader import load_identity
 
-identity = load_identity()  # default Paul profile
+identity = load_identity()  # default profile
 # or: identity = load_identity("profile_other_user.yaml")
 
-system_prompt = identity.build_system_prompt("Your task instructions here")
+system_prompt = identity.build_system_prompt("Your task instructions")
 ```
 
-> **Note:** The `00_MASTER_CITATION.md` (v15.2) remains as historical/runtime context. The v16 Standard + Profile now govern identity architecture.
+**For New Users:**
+See [`docs/onboarding/`](docs/onboarding/) for setup guides and Vault introduction.
+
+> **Note:** The `00_MASTER_CITATION.md` (v15.2) remains as historical/runtime context. The v16 identity model now governs architecture.
 
 ---
 
@@ -137,6 +147,9 @@ MirrorDNA-Standard/
 ├── spec/                          ← The Standard (canonical specs)
 │   ├── mirror/                        ⭐ MirrorDNA Identity v16
 │   │   ├── MirrorDNA_Master_Standard_v16.md    Abstract constitutional spec
+│   │   ├── fingerprint/                        Origin signature module
+│   │   ├── provenance/                         Authorship lineage
+│   │   ├── governance/                         Change control rules
 │   │   └── profiles/
 │   │       └── profile_paul_v16.yaml           Paul-specific profile overlay
 │   ├── mirrorDNA-standard-v1.0.md     ⭐ Core specification
@@ -177,7 +190,10 @@ MirrorDNA-Standard/
 │   ├── ARCHITECTURE.md                 How this repo works
 │   ├── FAQ.md                          Common questions
 │   ├── INTEGRATION.md                  How to adopt MirrorDNA
-│   └── CHOOSING_COMPLIANCE_LEVEL.md    Decision guide
+│   ├── CHOOSING_COMPLIANCE_LEVEL.md    Decision guide
+│   └── onboarding/                     ⭐ New user setup guides
+│       ├── MirrorDNA_Onboarding_v1.md       Getting started
+│       └── Vault_Intro_for_New_Users.md     Vault setup guide
 │
 └── portable/                      ← Reference implementation
     ├── launcher/                       Electron desktop app

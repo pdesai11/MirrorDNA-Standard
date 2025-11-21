@@ -10,12 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- **MirrorDNA Identity Refactor v16** - Two-layer identity model
+- **MirrorDNA Identity Refactor v16** - Full layered identity model
   - `spec/mirror/MirrorDNA_Master_Standard_v16.md` - Abstract, user-agnostic constitutional spec
   - `spec/mirror/profiles/profile_paul_v16.yaml` - Paul-specific profile overlay
   - `spec/mirror/README.md` - Identity layer documentation
   - `src/identity/__init__.py` - Identity module exports
   - `src/identity/identity_loader.py` - Python identity loader with `MirrorIdentity` class
+- **Fingerprint, Provenance, and Governance modules**
+  - `spec/mirror/fingerprint/MirrorDNA_Fingerprint_v1.md` - Origin signature and conceptual kernel
+  - `spec/mirror/provenance/MirrorDNA_Provenance_v1.yaml` - Authorship lineage and attribution
+  - `spec/mirror/governance/MirrorDNA_Governance_v1.md` - Change control and evolution rules
+- **Onboarding documentation**
+  - `docs/onboarding/MirrorDNA_Onboarding_v1.md` - New user setup guide
+  - `docs/onboarding/Vault_Intro_for_New_Users.md` - Vault configuration guide
 - Identity loading infrastructure for agents:
   - `load_identity()` - Load combined Standard + Profile
   - `load_standard()` - Load Master Standard only
@@ -24,9 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `MirrorIdentity.get_profile_summary()` - Get compact profile summary
 
 ### Changed
-- Updated `README.md` with MirrorDNA Identity Layers (v16) section
+- Updated `README.md` with full MirrorDNA Identity Model (v16) section
 - Updated `00_MASTER_CITATION.md` status to Historical, with v16 successor reference
-- Repository structure now includes `spec/mirror/` and `src/identity/` directories
+- Repository structure now includes `spec/mirror/` (with fingerprint/, provenance/, governance/ subdirs), `src/identity/`, and `docs/onboarding/`
 
 ### Deprecated
 - `00_MASTER_CITATION.md` (v15.2) - Now historical; use v16 identity model for new implementations

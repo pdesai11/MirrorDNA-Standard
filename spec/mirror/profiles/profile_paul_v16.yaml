@@ -26,5 +26,5 @@ overrides:
   truth_state_required: true
 
 notes:
-  - "Paul is the canonical human anchor for the ecosystem."
-  - "All user-facing continuity defaults to Paul's Master Citation unless overridden."
+  - "Canonical human anchor for the ecosystem."
+  - "Default profile when no other profile is specified."

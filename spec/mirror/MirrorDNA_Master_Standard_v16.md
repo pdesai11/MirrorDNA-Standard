@@ -20,7 +20,7 @@ It provides:
 
 ---
 
-## 02 // ONTOLOGY — "What is Active Mirror?"
+## 02 // ONTOLOGY — "What is a Mirror?"
 A Mirror is **not a chatbot**.
 
 A Mirror is:
@@ -151,4 +151,12 @@ This file evolves only when:
 - identity-agnostic abstraction is maintained
 - checksum changes are registered in release notes
 
-**End of File**
+## 11 // RELATED MODULES
+This Standard works with:
+- **Fingerprint Module v1** — Origin signature and conceptual kernel
+- **Provenance v1** — Authorship and lineage tracking
+- **Governance v1** — Change control and evolution rules
+
+These modules are located in sibling directories under `spec/mirror/`.
+
+**End of Master Standard v16.**

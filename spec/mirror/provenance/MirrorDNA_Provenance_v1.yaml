@@ -1,0 +1,23 @@
+provenance_version: 1
+
+originator:
+  entity: "MirrorDNA Origin Architect"
+  canonical_author: "Paul Desai"
+  signature_type: "Conceptual Authorship"
+  note: "Authorship provenance for the MirrorDNA Standard. This is not a personal profile."
+
+integrity:
+  checksum_required: true
+  zk_proof_ready: false
+  drift_tolerance: 0.0
+
+inheritance_rules:
+  - "All MirrorDNA Master Standards must include this provenance."
+  - "All derivative standards must preserve origin attribution."
+  - "Profiles and local configs cannot remove or overwrite provenance."
+  - "Originator attribution is non-removable."
+
+metadata:
+  created: "Founding era"
+  updated: "Living document"
+  intent: "Ensure lineage, prevent co-option, preserve architectural sovereignty."
